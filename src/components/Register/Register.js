@@ -1,5 +1,4 @@
 import React from 'react';
-//import './Register.css';
 
 class Register extends React.Component {
     constructor(props){
@@ -7,7 +6,8 @@ class Register extends React.Component {
         this.state = {
             nameInput:'',
             emailInput:'',
-            passwordInput:''
+            passwordInput:'',
+            errorMessage: ''
         }
     }
 
@@ -35,18 +35,17 @@ class Register extends React.Component {
         })
             .then(response => response.json())
             .then(result => {
-                //console.log(result);
                 if(result.id){
-                    //console.log(result);
                     this.props.updateProfile(result);
-                    this.props.routeChange('home');
+                    this.props.routeChange('home', false);
+                }else{
+                    this.setState({errorMessage: result});
                 }
-                //********* Else Error **********
             })
     }
 
     render(){
-        const { routeChange, routeChangeGuest } = this.props;
+        const { routeChange } = this.props;
         return (
             <article className="br3 ba b--black-10 mv4 w-80 w-40-l mw6 shadow-5 center">
                 <main className="pa4 black-80">
@@ -61,12 +60,16 @@ class Register extends React.Component {
                                 <label className="db fw6 lh-copy f4" for="email-address">Email</label>
                                 <input onChange={this.onEmailChange} className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-80" type="email" name="email-address"  id="email-address"/>
                             </div>
-                            <div className="mv3">
+                            <div className="mt3">
                                 <label className="db fw6 lh-copy f4" for="password">Password</label>
                                 <input onChange={this.onPassChange} className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-80" type="password" name="password"  id="password"/>
                             </div>
                         </fieldset>
-                        <div className="">
+                        { this.state.errorMessage === ''
+                            ? ''
+                            : <div className='f4 b mv1 red'>{this.state.errorMessage}</div>
+                        }
+                        <div className="mt3">
                             <input 
                                 onClick={this.onRegisterClick} 
                                 className="w-60 mv2 b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f4 dib" 
@@ -74,22 +77,18 @@ class Register extends React.Component {
                                 value="Register"
                             />
                             <input 
-                                onClick={() => routeChange('signin')} 
+                                onClick={() => routeChange('signin', false)} 
                                 className="w-60 mv2 b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f4 dib" 
                                 type="submit" 
                                 value="Sign in"
                             />
                             <input 
-                                onClick={() => routeChangeGuest('home')}
+                                onClick={() => routeChange('home', true)}
                                 className="w-60 mv2 b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f4 dib" 
                                 type="submit" 
                                 value="Guest Login"
                             />
                         </div>
-                        {/* <div className="lh-copy mt3">
-                            <a href="#0" className="b f4 link dim black db">Guest Login</a>
-                            <a href="#0" className="b f4 link dim black db">Sign up</a>
-                        </div> */}
                     </div>
                 </main>
             </article>

@@ -47,6 +47,9 @@ class App extends Component {
       route:'signin',
       signedIn: false,
       isGuest: false,
+      celebrityName: '',
+      chance: '',
+      imageDetectionError: false,
       userProfile: {
         id: '',
         email: "",
@@ -57,34 +60,28 @@ class App extends Component {
     }
   }
 
-  routeChangeGuest = (state) => {
+  routeChange = (state, isGuest) => {
     if(state === 'home'){
       this.setState({
-        isGuest: true,
         signedIn: true,
+        isGuest: isGuest,
         entries: 0
       });
     }else{
       this.setState({
-        isGuest: false,
+        isGuest: isGuest,
         signedIn: false,
-        entries: 0
+        entries: 0,
+        imgURL: '',
+        celebrityName: '',
+        chance: ''
       });
-    }
-    this.setState({route: state});
-  }
-
-  routeChange = (state) => {
-    if(state === 'home'){
-      this.setState({signedIn: true});
-    }else{
-      this.setState({signedIn: false});
     }
     this.setState({route: state});
   }
 
   calculateLocation = (data) => {
-    const location = data.outputs[0].data.regions[0].region_info.bounding_box;
+    const location = data.region_info.bounding_box;
     const image = document.getElementById('inputImage');
     const width = Number(image.width);
     const height = Number(image.height);
@@ -97,37 +94,52 @@ class App extends Component {
     this.setState({box});
   }
 
+  calculateCelebrity = (inputData) => {
+    const celebrity = inputData.data.concepts[0];
+    const percentage = celebrity.value.toFixed(2) * 100;
+    this.setState({
+      celebrityName: celebrity.name,
+      chance: percentage + '%'
+    })
+  }
+
   onInputChange = (event) => {
     this.setState({input: event.target.value});
-    //console.log(this.state.input);
   }
 
   onDetect = () => {
-    this.setState({imgURL: this.state.input});
-    app.models.predict('c0c0ac362b03416da06ab3fa36fb58e3', this.state.input)
+    this.setState({
+      imgURL: this.state.input,
+      box: {},
+      celebrityName: '',
+      chance: '',
+      imageDetectionError: false
+    });
+    app.models.predict(Clarifai.CELEBRITY_MODEL, this.state.input)
       .then(response => {
-        if(response && !this.state.isGuest){
-          //console.log(this.state.userProfile.id);
-          fetch('http://localhost:3000/image', {
-            method: 'PUT',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-              id: this.state.userProfile.id
+        if(response.outputs[0].data.regions){
+          if(!this.state.isGuest){
+            fetch('http://localhost:3000/image', {
+              method: 'PUT',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({
+                id: this.state.userProfile.id
+              })
             })
-          })
-            .then(response => response.json())
-            .then(result => {
-              //console.log(result); 
-              this.setState(Object.assign(this.state.userProfile, {entries: result}));
-            })
-        }else if(this.state.isGuest){ 
-          console.log(this.state.entries);
-          this.setState({ entries: this.state.entries + 1 });
-          console.log(this.state.entries);
+              .then(response => response.json())
+              .then(result => {
+                this.setState(Object.assign(this.state.userProfile, {entries: result}));
+              })
+          }
+          const data = response.outputs[0].data.regions[0];
+          this.calculateLocation(data);
+          this.calculateCelebrity(data);
         }
-        this.calculateLocation(response)
       })
-      .catch(err => console.log(err))
+      .catch(err => { 
+        console.log(err);
+        this.setState({imageDetectionError: true});
+      })
   }
 
   updateProfile = (user) => {
@@ -138,14 +150,13 @@ class App extends Component {
       entries: user.entries,
       joined: user.joined
     }});
-    //console.log(this.state.userProfile);
   }
 
   render(){
     return (
       <div className="App">
         <Particles className='particles' params={particlesOption}/>
-        <Navigation signedIn={this.state.signedIn} routeChange={this.routeChange} routeChangeGuest={this.routeChangeGuest} isGuest={this.state.isGuest} />
+        <Navigation signedIn={this.state.signedIn} routeChange={this.routeChange} isGuest={this.state.isGuest} />
         { this.state.route === 'home'
           ? <div>
               <Logo />
@@ -154,11 +165,11 @@ class App extends Component {
                 onDetect={this.onDetect} 
                 onInputChange={this.onInputChange} 
               /> 
-              <FaceRecognition box={this.state.box} imgURL={this.state.imgURL} />
+              <FaceRecognition imageDetectionError={this.state.imageDetectionError} celebrityName={this.state.celebrityName} chance={this.state.chance} box={this.state.box} imgURL={this.state.imgURL} />
             </div>
           : (
               this.state.route === 'signin'
-              ?<SigninForm routeChangeGuest={this.routeChangeGuest} updateProfile={this.updateProfile} routeChange={this.routeChange} />
+              ?<SigninForm updateProfile={this.updateProfile} routeChange={this.routeChange} />
               :<Register routeChangeGuest={this.routeChangeGuest} updateProfile={this.updateProfile} routeChange={this.routeChange} />
             )
         } 

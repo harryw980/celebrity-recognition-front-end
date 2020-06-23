@@ -10,3 +10,19 @@
     background-size: 109px 109px, 109px 109px,100% 6px, 109px 109px, 109px 109px;
     background-position: 54px 55px, 0px 0px, 0px 0px, 0px 0px, 0px 0px;
 }
+
+::-webkit-input-placeholder {
+text-align: center;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+text-align: center;  
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+text-align: center;  
+}
+
+:-ms-input-placeholder {  
+text-align: center; 
+}

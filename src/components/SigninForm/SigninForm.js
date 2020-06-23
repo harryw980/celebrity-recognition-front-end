@@ -1,12 +1,12 @@
 import React from 'react';
-//import './Signindiv.css';
 
 class Signindiv extends React.Component {
     constructor(props){
         super(props);
         this.state = {
             emailInput:'',
-            passwordInput:''
+            passwordInput:'',
+            errorMessage: ''
         }
     }
 
@@ -29,17 +29,17 @@ class Signindiv extends React.Component {
         })
             .then(response => response.json())
             .then(result => {
-                //console.log(result);
                 if(result.id){
                     this.props.updateProfile(result);
-                    this.props.routeChange('home');
+                    this.props.routeChange('home', false);
+                }else{
+                    this.setState({errorMessage: result});
                 }
-                //********* Else Error **********
             })
     }
 
     render(){
-        const { routeChange, routeChangeGuest } = this.props;
+        const { routeChange } = this.props;
         return (
             <article className="br3 ba b--black-10 mv4 w-80 w-40-l mw6 shadow-5 center" >
                 <main className="pa4 black-80">
@@ -50,12 +50,16 @@ class Signindiv extends React.Component {
                                 <label className="db fw6 lh-copy f4" for="email-address">Email</label>
                                 <input onChange={this.onEmailChange} className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-80" type="email" name="email-address"  id="email-address"/>
                             </div>
-                            <div className="mv3">
+                            <div className="mt3">
                                 <label className="db fw6 lh-copy f4" for="password">Password</label>
                                 <input onChange={this.onPassChange} className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-80" type="password" name="password"  id="password"/>
                             </div>
                         </fieldset>
-                        <div className="">
+                        { this.state.errorMessage === ''
+                            ? ''
+                            : <div className='f4 b mv1 red'>{this.state.errorMessage}</div>
+                        }
+                        <div className="mt3">
                             <input 
                                 onClick = {this.onSigninClick} 
                                 className="w-60 mv2 b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f4 dib" 
@@ -63,13 +67,13 @@ class Signindiv extends React.Component {
                                 value="Sign In"
                             />
                             <input 
-                                onClick={() => routeChange('register')}
+                                onClick={() => routeChange('register', false)}
                                 className="w-60 mv2 b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f4 dib" 
                                 type="submit" 
                                 value="Register"
                             />
                             <input 
-                                onClick={() => routeChangeGuest('home')}
+                                onClick={() => routeChange('home', true)}
                                 className="w-60 mv2 b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f4 dib" 
                                 type="submit" 
                                 value="Guest Login"
