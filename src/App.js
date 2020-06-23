@@ -47,8 +47,7 @@ class App extends Component {
       route:'signin',
       signedIn: false,
       isGuest: false,
-      celebrityName: '',
-      chance: '',
+      celebrityNameMessage: '',
       imageDetectionError: false,
       userProfile: {
         id: '',
@@ -73,8 +72,7 @@ class App extends Component {
         signedIn: false,
         entries: 0,
         imgURL: '',
-        celebrityName: '',
-        chance: ''
+        celebrityNameMessage: '',
       });
     }
     this.setState({route: state});
@@ -96,10 +94,9 @@ class App extends Component {
 
   calculateCelebrity = (inputData) => {
     const celebrity = inputData.data.concepts[0];
-    const percentage = celebrity.value.toFixed(2) * 100;
+    const percentage = celebrity.value.toFixed(4) * 100;
     this.setState({
-      celebrityName: celebrity.name,
-      chance: percentage + '%'
+      celebrityNameMessage: (percentage < 1)?'No Celebrity Detection':(celebrity.name + ' ' + percentage + '%')
     })
   }
 
@@ -111,8 +108,7 @@ class App extends Component {
     this.setState({
       imgURL: this.state.input,
       box: {},
-      celebrityName: '',
-      chance: '',
+      celebrityNameMessage: '',
       imageDetectionError: false
     });
     app.models.predict(Clarifai.CELEBRITY_MODEL, this.state.input)
@@ -165,7 +161,7 @@ class App extends Component {
                 onDetect={this.onDetect} 
                 onInputChange={this.onInputChange} 
               /> 
-              <FaceRecognition imageDetectionError={this.state.imageDetectionError} celebrityName={this.state.celebrityName} chance={this.state.chance} box={this.state.box} imgURL={this.state.imgURL} />
+              <FaceRecognition imageDetectionError={this.state.imageDetectionError} celebrityNameMessage={this.state.celebrityNameMessage} box={this.state.box} imgURL={this.state.imgURL} />
             </div>
           : (
               this.state.route === 'signin'

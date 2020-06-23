@@ -2,7 +2,7 @@ import React from 'react';
 import './FaceRecognition.css';
 
 
-function FaceRecognition({ celebrityName, chance, imgURL, box, imageDetectionError }) {
+function FaceRecognition({ celebrityNameMessage, imgURL, box, imageDetectionError }){
     if(imageDetectionError){
         return <div className='center b red f2'>Invalid Image URL</div>
     }
@@ -15,7 +15,7 @@ function FaceRecognition({ celebrityName, chance, imgURL, box, imageDetectionErr
                         <div className=''>
                             <div className='bounding-box__concept' title=''>
                                 <span className='f5'>
-                                    {celebrityName + ' ' + chance}
+                                    {celebrityNameMessage}
                                 </span>
                             </div>
                         </div>
