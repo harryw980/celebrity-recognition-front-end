@@ -94,9 +94,9 @@ class App extends Component {
 
   calculateCelebrity = (inputData) => {
     const celebrity = inputData.data.concepts[0];
-    const percentage = celebrity.value.toFixed(4) * 100;
+    const percentage = Math.round(celebrity.value*10000)/100;
     this.setState({
-      celebrityNameMessage: (percentage < 1)?'No Celebrity Detection':(celebrity.name + ' ' + percentage + '%')
+      celebrityNameMessage: (percentage < 1)?'No Celebrity Detection':(celebrity.name + ': ' + percentage + '%')
     })
   }
 
@@ -133,7 +133,6 @@ class App extends Component {
         }
       })
       .catch(err => { 
-        console.log(err);
         this.setState({imageDetectionError: true});
       })
   }
