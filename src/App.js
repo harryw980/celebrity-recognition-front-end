@@ -115,7 +115,7 @@ class App extends Component {
       .then(response => {
         if(response.outputs[0].data.regions){
           if(!this.state.isGuest){
-            fetch('http://localhost:3000/image', {
+            fetch('https://secret-shore-76423.herokuapp.com/image', {
               method: 'PUT',
               headers: {'Content-Type': 'application/json'},
               body: JSON.stringify({
