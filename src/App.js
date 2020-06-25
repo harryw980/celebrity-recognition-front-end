@@ -10,6 +10,7 @@ import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import SigninForm from './components/SigninForm/SigninForm';
 import Register from './components/Register/Register'
 
+//background object
 const particlesOption = {
   "particles": {
     "number": {
@@ -23,6 +24,7 @@ const particlesOption = {
       "value": 3
     }
   },
+  //*****Background Interaction Option Disabled*****
   // "interactivity": {
   //   "events": {
   //       "onhover": {
@@ -33,9 +35,28 @@ const particlesOption = {
   // }
 }
 
+//Clarifal celebrity recognition api setup
 const app = new Clarifai.App({
   apiKey: '90d630dbb3394c9a9c99159a78fa0dc5'
 });
+
+const initialState = {
+  input:'',
+  imgURL:'',
+  box:{},
+  route:'signin',
+  signedIn: false,
+  isGuest: false,
+  celebrityNameMessage: '',
+  imageDetectionError: false,
+  userProfile: {
+    id: '',
+    email: "",
+    name: "",
+    entries: 0,
+    joined: ''
+  }
+}
 
 class App extends Component {
   constructor() {
@@ -64,16 +85,9 @@ class App extends Component {
       this.setState({
         signedIn: true,
         isGuest: isGuest,
-        entries: 0
       });
     }else{
-      this.setState({
-        isGuest: isGuest,
-        signedIn: false,
-        entries: 0,
-        imgURL: '',
-        celebrityNameMessage: '',
-      });
+      this.setState(initialState);
     }
     this.setState({route: state});
   }
