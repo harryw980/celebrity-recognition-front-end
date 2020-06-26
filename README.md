@@ -1,6 +1,6 @@
-##This App is able to detect celebrities from any image and give you the name of this celebrity, If he/she in the image is not a celebrity, it would locate his/her face for you!
+## This App is able to detect celebrities from any image and give you the name of this celebrity, If he/she in the image is not a celebrity, it would locate his/her face for you!
 
-To use: You can login as guest to skip registeration, or you can create account of your own to keep track of your entry number
+##To use: You can login as guest to skip registeration, or you can create account of your own to keep track of your entry number
 
 This project was bootstrapped with [Create React App]
 
