@@ -1,8 +1,12 @@
-## This App is able to detect celebrities from any image and give you the name of this celebrity, If he/she in the image is not a celebrity, it would locate his/her face for you!
+## Have Celebrities Detected from Images
 
-##To use: You can login as guest to skip registeration, or you can create account of your own to keep track of your entry number
+This web App is able to detect celebrities from any image and give you the name of this celebrity, If he/she in the image is not a celebrity, it would still locate his/her face for you!
 
-This project was bootstrapped with [Create React App]
+Link: https://celebrity-recognition-webapp.herokuapp.com/ (heroku deployment)
+
+To use: You can login as guest to skip registeration, or you can create account of your own to keep track of your entry number
+
+(This project was bootstrapped with [Create React App])
 
 ## Available Scripts
 
