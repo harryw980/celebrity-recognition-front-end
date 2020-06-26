@@ -1,6 +1,5 @@
 import React from 'react';
-import './Logo.css';
-import Tilt from 'react-tilt';
+import Tilt from 'react-tilt'; //library used for logo UI
 import brain from './logo.png';
 
 

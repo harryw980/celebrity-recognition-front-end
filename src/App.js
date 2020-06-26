@@ -24,7 +24,7 @@ const particlesOption = {
       "value": 3
     }
   },
-  //*****Background Interaction Option Disabled*****
+  //********Background Interaction Option Disabled********
   // "interactivity": {
   //   "events": {
   //       "onhover": {
@@ -40,6 +40,8 @@ const app = new Clarifai.App({
   apiKey: '90d630dbb3394c9a9c99159a78fa0dc5'
 });
 
+
+//Variable used to reset state upon logout
 const initialState = {
   input:'',
   imgURL:'',
@@ -80,6 +82,7 @@ class App extends Component {
     }
   }
 
+  //state change when users signin/register/signout
   routeChange = (state, isGuest) => {
     if(state === 'home'){
       this.setState({
@@ -92,6 +95,7 @@ class App extends Component {
     this.setState({route: state});
   }
 
+  //calculate location of the face using data responded by Clarifai API
   calculateLocation = (data) => {
     const location = data.region_info.bounding_box;
     const image = document.getElementById('inputImage');
@@ -106,6 +110,7 @@ class App extends Component {
     this.setState({box});
   }
 
+  //obtain the celebrity information using data responded by Clarifai API
   calculateCelebrity = (inputData) => {
     const celebrity = inputData.data.concepts[0];
     const percentage = Math.round(celebrity.value*10000)/100;
@@ -114,12 +119,16 @@ class App extends Component {
     })
   }
 
+  //function used to change state when the image URL input changes
   onInputChange = (event) => {
     this.setState({input: event.target.value});
   }
 
+  //upon detecting celebrity/face from image,
+  //setstate according to the user input image 
+  // URL and responded data from Clarifai
   onDetect = () => {
-    this.setState({
+    this.setState({ //reset state upon clicking button
       imgURL: this.state.input,
       box: {},
       celebrityNameMessage: '',
@@ -127,8 +136,8 @@ class App extends Component {
     });
     app.models.predict(Clarifai.CELEBRITY_MODEL, this.state.input)
       .then(response => {
-        if(response.outputs[0].data.regions){
-          if(!this.state.isGuest){
+        if(response.outputs[0].data.regions){ //if the format of the responded data is corrent
+          if(!this.state.isGuest){ //if user is registered, updating user informtion(number of entries from users) to the server
             fetch('https://secret-shore-76423.herokuapp.com/image', {
               method: 'PUT',
               headers: {'Content-Type': 'application/json'},
@@ -141,6 +150,7 @@ class App extends Component {
                 this.setState(Object.assign(this.state.userProfile, {entries: result}));
               })
           }
+          //calls functions to calculate face location/ celebrity information
           const data = response.outputs[0].data.regions[0];
           this.calculateLocation(data);
           this.calculateCelebrity(data);
@@ -151,6 +161,7 @@ class App extends Component {
       })
   }
 
+  //function updating user profile upon logging in
   updateProfile = (user) => {
     this.setState({userProfile: {
       id: user.id,
@@ -164,22 +175,47 @@ class App extends Component {
   render(){
     return (
       <div className="App">
-        <Particles className='particles' params={particlesOption}/>
-        <Navigation signedIn={this.state.signedIn} routeChange={this.routeChange} isGuest={this.state.isGuest} />
+        <Particles 
+          className='particles' 
+          params={particlesOption}
+        />
+        <Navigation 
+          signedIn={this.state.signedIn} 
+          routeChange={this.routeChange} 
+          isGuest={this.state.isGuest} 
+        />
+        
+        {/* Displaying homepage/signinPage/registerPage according to route state */}
         { this.state.route === 'home'
           ? <div>
               <Logo />
-              <Rank name={this.state.userProfile.name} entries={this.state.userProfile.entries} isGuest={this.state.isGuest} />
+              <Rank 
+                name={this.state.userProfile.name} 
+                entries={this.state.userProfile.entries} 
+                isGuest={this.state.isGuest} 
+              />
               <LinkForm 
                 onDetect={this.onDetect} 
                 onInputChange={this.onInputChange} 
               /> 
-              <FaceRecognition imageDetectionError={this.state.imageDetectionError} celebrityNameMessage={this.state.celebrityNameMessage} box={this.state.box} imgURL={this.state.imgURL} />
+              <FaceRecognition 
+                imageDetectionError={this.state.imageDetectionError} 
+                celebrityNameMessage={this.state.celebrityNameMessage} 
+                box={this.state.box} 
+                imgURL={this.state.imgURL} 
+              />
             </div>
           : (
               this.state.route === 'signin'
-              ?<SigninForm updateProfile={this.updateProfile} routeChange={this.routeChange} />
-              :<Register routeChangeGuest={this.routeChangeGuest} updateProfile={this.updateProfile} routeChange={this.routeChange} />
+              ?<SigninForm 
+                updateProfile={this.updateProfile} 
+                routeChange={this.routeChange} 
+              />
+              :<Register 
+                routeChangeGuest={this.routeChangeGuest} 
+                updateProfile={this.updateProfile} 
+                routeChange={this.routeChange} 
+              />
             )
         } 
       </div>

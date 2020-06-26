@@ -1,9 +1,7 @@
 import React from 'react';
-//import './Rank.css';
-
 
 function Rank({ name, entries, isGuest }) {
-    return (
+    return ( //displaying messages according to isGuest state/user profile
         <div>
             <div className='white f3 mb2'>
                 {isGuest?'':`${name}, your number of entry is...`}

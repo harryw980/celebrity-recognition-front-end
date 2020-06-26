@@ -11,6 +11,7 @@ class Register extends React.Component {
         }
     }
 
+    //function for input state changes
     onNameChange = (event) => {
         this.setState({ nameInput: event.target.value });
     }
@@ -23,6 +24,7 @@ class Register extends React.Component {
         this.setState({ passwordInput: event.target.value });
     } 
 
+    //sending user registeration information to the server
     onRegisterClick = () => {
         fetch('https://secret-shore-76423.herokuapp.com/register', {
             method: 'POST',
@@ -53,16 +55,49 @@ class Register extends React.Component {
                         <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
                             <legend className="f1 fw6 ph0 mh0">Register</legend>
                             <div className="mt3">
-                                <label className="db fw6 lh-copy f4" for="email-address">Nickname</label>
-                                <input onChange={this.onNameChange} className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-80" type="text" name="text"  id="Nickname"/>
+                                <label 
+                                    className="db fw6 lh-copy f4" 
+                                    for="email-address"
+                                > 
+                                    Nickname
+                                </label>
+                                <input 
+                                    onChange={this.onNameChange} 
+                                    className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-80" 
+                                    type="text" 
+                                    name="text"  
+                                    id="Nickname"
+                                />
                             </div>
                             <div className="mt3">
-                                <label className="db fw6 lh-copy f4" for="email-address">Email</label>
-                                <input onChange={this.onEmailChange} className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-80" type="email" name="email-address"  id="email-address"/>
+                                <label 
+                                    className="db fw6 lh-copy f4" 
+                                    for="email-address"
+                                >
+                                    Email
+                                </label>
+                                <input 
+                                    onChange={this.onEmailChange} 
+                                    className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-80" 
+                                    type="email" 
+                                    name="email-address"  
+                                    id="email-address"
+                                />
                             </div>
                             <div className="mt3">
-                                <label className="db fw6 lh-copy f4" for="password">Password</label>
-                                <input onChange={this.onPassChange} className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-80" type="password" name="password"  id="password"/>
+                                <label 
+                                    className="db fw6 lh-copy f4" 
+                                    for="password"
+                                >
+                                    Password
+                                </label>
+                                <input 
+                                    onChange={this.onPassChange} 
+                                    className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-80" 
+                                    type="password" 
+                                    name="password"  
+                                    id="password"
+                                />
                             </div>
                         </fieldset>
                         { this.state.errorMessage === ''

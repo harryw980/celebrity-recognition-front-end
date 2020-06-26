@@ -1,7 +1,7 @@
 import React from 'react';
-//import './Navigation.css';
 
 function Navigation({ signedIn, routeChange, isGuest }) {
+    //Displaying buttons for signinPage/registerPage accourding to isSignedIn state
     if(signedIn){
         return (
             <nav style={{ display: 'flex', justifyContent: 'flex-end' }}>

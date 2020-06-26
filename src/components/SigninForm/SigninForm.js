@@ -10,6 +10,7 @@ class Signindiv extends React.Component {
         }
     }
 
+    //function for input state changes
     onEmailChange = (event) => {
         this.setState({ emailInput: event.target.value });
     } 
@@ -18,6 +19,7 @@ class Signindiv extends React.Component {
         this.setState({ passwordInput: event.target.value });
     } 
 
+    //sending user signin information to the server for verification
     onSigninClick = () => {
         fetch('https://secret-shore-76423.herokuapp.com/signin', {
             method: 'POST',
@@ -47,12 +49,34 @@ class Signindiv extends React.Component {
                         <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
                             <legend className="f1 fw6 ph0 mh0">Sign In</legend>
                             <div className="mt3">
-                                <label className="db fw6 lh-copy f4" for="email-address">Email</label>
-                                <input onChange={this.onEmailChange} className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-80" type="email" name="email-address"  id="email-address"/>
+                                <label 
+                                    className="db fw6 lh-copy f4" 
+                                    for="email-address"
+                                >
+                                    Email
+                                </label>
+                                <input 
+                                    onChange={this.onEmailChange} 
+                                    className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-80" 
+                                    type="email" 
+                                    name="email-address"  
+                                    id="email-address"
+                                />
                             </div>
                             <div className="mt3">
-                                <label className="db fw6 lh-copy f4" for="password">Password</label>
-                                <input onChange={this.onPassChange} className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-80" type="password" name="password"  id="password"/>
+                                <label 
+                                    className="db fw6 lh-copy f4" 
+                                    for="password"
+                                >
+                                    Password
+                                </label>
+                                <input 
+                                    onChange={this.onPassChange} 
+                                    className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-80" 
+                                    type="password" 
+                                    name="password"  
+                                    id="password"
+                                />
                             </div>
                         </fieldset>
                         { this.state.errorMessage === ''

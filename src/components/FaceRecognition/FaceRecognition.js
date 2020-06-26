@@ -3,7 +3,7 @@ import './FaceRecognition.css';
 
 
 function FaceRecognition({ celebrityNameMessage, imgURL, box, imageDetectionError }){
-    if(imageDetectionError){
+    if(imageDetectionError){ //usually wrong input format
         return <div className='center b red f2'>Invalid Image URL</div>
     }
     else{
